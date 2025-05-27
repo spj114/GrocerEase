@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrocerEase Management</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+    <h1>GrocerEase Management</h1>
+    <div id="globalMessage" class="message" style="display: none;"></div>
+
+    <!-- Products Section -->
+    <div class="container">
+        <h2>Products</h2>
+        <button onclick="fetchProducts()">Refresh Products</button>
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>UOM</th>
+                    <th>Price/Unit</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Product rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <h3>Add New Product</h3>
+        <form id="addProductForm">
+            <label for="productName">Name:</label>
+            <input type="text" id="productName" name="productName" required>
+
+            <label for="productUom">UOM:</label>
+            <select id="productUom" name="productUom" required>
+                <!-- UOM options will be inserted here -->
+            </select>
+
+            <label for="productPrice">Price per Unit:</label>
+            <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="container">
+        <h2>Orders</h2>
+        <button onclick="fetchOrders()">Refresh Orders</button>
+        <table id="ordersTable">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer Name</th>
+                    <th>Total Cost</th>
+                    <th>Date/Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Order rows will be inserted here -->
+            </tbody>
+        </table>
+
+        <h3>Add New Order (Simplified)</h3>
+        <form id="addOrderForm">
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" required>
+
+            <label for="grandTotal">Grand Total:</label>
+            <input type="number" id="grandTotal" name="grandTotal" step="0.01" required>
+            
+            <p>Order Details (Example - ensure Product ID 1 exists in your DB, or change value):</p>
+            <div id="orderDetailsContainer">
+                 <input type="hidden" name="product_id_1" value="1">
+                 <input type="hidden" name="quantity_1" value="2">
+                 <input type="hidden" name="total_price_1" value="50">
+            </div>
+            <button type="submit">Add Order</button>
+        </form>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>
