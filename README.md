@@ -1,7 +1,5 @@
 # GrocerEase: Grocery Store Management System
 
-![GrocerEase Banner](https://via.placeholder.com/1200x300.png?text=GrocerEase+Management+System)
-
 GrocerEase: Simplifying grocery store management with a Python/Flask API. Features product, order, and UOM handling, backed by MySQL, and includes a basic HTML/JS frontend for easy demonstration.
 
 This project was developed as a learning exercise to understand backend development principles, API creation, database interaction with Python, and basic frontend integration.
