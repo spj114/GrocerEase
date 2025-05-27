@@ -38,23 +38,7 @@ This project was developed as a learning exercise to understand backend developm
     *   Environment variables for database configuration.
 
 ## 📂 Project Structure
-GrocerEase/
-├── .gitignore 
-├── README.md 
-├── requirements.txt
-├── database_schema.sql 
-├── orders_dao.py 
-├── products_dao.py 
-├── server.py 
-├── sql_connection.py 
-├── uom_dao.py 
-├── static/
-│   ├── css/
-│   │   └── style.css
-│   └── js/
-│       └── script.js
-└── templates/  
-    └── index.html
+<pre> ``` GrocerEase/ ├── .gitignore ├── README.md ├── requirements.txt ├── database_schema.sql ├── orders_dao.py ├── products_dao.py ├── server.py ├── sql_connection.py ├── uom_dao.py ├── static/ │ ├── style.css │ └── script.js └── templates/ └── index.html ``` </pre>
 
 
 ## 🚀 Getting Started
