@@ -38,7 +38,23 @@ This project was developed as a learning exercise to understand backend developm
     *   Environment variables for database configuration.
 
 ## 📂 Project Structure
-<pre> ``` GrocerEase/ ├── .gitignore ├── README.md ├── requirements.txt ├── database_schema.sql ├── orders_dao.py ├── products_dao.py ├── server.py ├── sql_connection.py ├── uom_dao.py ├── static/ │ ├── style.css │ └── script.js └── templates/ └── index.html ``` </pre>
+```
+GrocerEase/
+├── .gitignore              # Git ignore rules
+├── README.md               # Project documentation
+├── requirements.txt        # Python dependencies
+├── database_schema.sql     # Database schema SQL
+├── orders_dao.py           # DAO for orders
+├── products_dao.py         # DAO for products
+├── server.py               # Main Flask server
+├── sql_connection.py       # DB connection module
+├── uom_dao.py              # DAO for units of measurement
+├── static/
+│   ├── style.css           # CSS styles
+│   └── script.js           # JS scripts
+└── templates/
+    └── index.html          # Main HTML template
+```
 
 
 ## 🚀 Getting Started
