@@ -3,104 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery Store Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        h1, h2 {
-            color: #333;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f9f9f9;
-        }
-        button {
-            padding: 8px 15px;
-            background-color: #5cb85c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-        button.delete {
-            background-color: #d9534f;
-        }
-        button:hover {
-            opacity: 0.9;
-        }
-        form {
-            margin-top: 15px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        form label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        form input[type="text"],
-        form input[type="number"],
-        form select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .message {
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 4px;
-        }
-        .message.success {
-            background-color: #dff0d8;
-            color: #3c763d;
-            border: 1px solid #d6e9c6;
-        }
-        .message.error {
-            background-color: #f2dede;
-            color: #a94442;
-            border: 1px solid #ebccd1;
-        }
-        .order-details-table {
-            margin-top: 10px;
-            margin-left: 20px;
-            width: calc(100% - 40px);
-        }
-        .order-details-table th, .order-details-table td {
-            font-size: 0.9em;
-            padding: 6px;
-        }
-    </style>
+    <title>GrocerEase Management</title>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
 
-    <h1>Grocery Store Management</h1>
+    <h1>GrocerEase Management</h1>
     <div id="globalMessage" class="message" style="display: none;"></div>
 
     <!-- Products Section -->
@@ -150,7 +58,6 @@
                     <th>Customer Name</th>
                     <th>Total Cost</th>
                     <th>Date/Time</th>
-                    <!--<th>Details</th>-->
                 </tr>
             </thead>
             <tbody>
@@ -166,207 +73,16 @@
             <label for="grandTotal">Grand Total:</label>
             <input type="number" id="grandTotal" name="grandTotal" step="0.01" required>
             
-            <p>Order Details (Example - for a more complex UI, this would be dynamic):</p>
+            <p>Order Details (Example - ensure Product ID 1 exists in your DB, or change value):</p>
             <div id="orderDetailsContainer">
-                <!-- Example for a simple hardcoded order detail for submission -->
-                 <input type="hidden" name="product_id_1" value="1"> <!-- Example Product ID - CHANGE THIS if product 1 doesn't exist -->
-                 <input type="hidden" name="quantity_1" value="2">   <!-- Example Quantity -->
-                 <input type="hidden" name="total_price_1" value="50"> <!-- Example Total Price -->
+                 <input type="hidden" name="product_id_1" value="1">
+                 <input type="hidden" name="quantity_1" value="2">
+                 <input type="hidden" name="total_price_1" value="50">
             </div>
             <button type="submit">Add Order</button>
         </form>
     </div>
 
-    <script>
-        const API_BASE_URL = 'http://localhost:5000';
-
-        // --- Message Handling ---
-        function showMessage(message, type = 'success') {
-            const msgDiv = document.getElementById('globalMessage');
-            msgDiv.textContent = message;
-            msgDiv.className = `message ${type}`;
-            msgDiv.style.display = 'block';
-            setTimeout(() => { msgDiv.style.display = 'none'; }, 5000);
-        }
-
-        // --- UOM Functions ---
-        async function fetchUOMs() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/getUOM`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const uoms = await response.json();
-                
-                const uomSelect = document.getElementById('productUom');
-                uomSelect.innerHTML = '<option value="">Select UOM</option>'; // Clear existing
-                uoms.forEach(uom => {
-                    const option = document.createElement('option');
-                    option.value = uom.uom_id;
-                    option.textContent = uom.uom_name;
-                    uomSelect.appendChild(option);
-                });
-            } catch (error) {
-                console.error('Error fetching UOMs:', error);
-                showMessage('Failed to load UOMs. ' + error.message, 'error');
-            }
-        }
-
-        // --- Product Functions ---
-        async function fetchProducts() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/getProducts`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const products = await response.json();
-                
-                const tbody = document.getElementById('productsTable').getElementsByTagName('tbody')[0];
-                tbody.innerHTML = ''; // Clear existing rows
-                products.forEach(product => {
-                    const row = tbody.insertRow();
-                    row.insertCell().textContent = product.product_id;
-                    row.insertCell().textContent = product.name;
-                    row.insertCell().textContent = product.uom_name;
-                    row.insertCell().textContent = parseFloat(product.price_per_unit).toFixed(2);
-                    
-                    const actionsCell = row.insertCell();
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.className = 'delete';
-                    deleteButton.onclick = () => deleteProduct(product.product_id);
-                    actionsCell.appendChild(deleteButton);
-                });
-            } catch (error) {
-                console.error('Error fetching products:', error);
-                showMessage('Failed to load products. ' + error..message, 'error');
-            }
-        }
-
-        document.getElementById('addProductForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            const productData = {
-                name: formData.get('productName'),
-                uom_id: formData.get('productUom'),
-                price_per_unit: formData.get('productPrice')
-            };
-
-            const payload = new FormData();
-            payload.append('data', JSON.stringify(productData));
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/insertProduct`, {
-                    method: 'POST',
-                    body: payload 
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.error || `HTTP error! status: ${response.status}`);
-                
-                showMessage(`Product added successfully! ID: ${result.product_id}`, 'success');
-                fetchProducts(); // Refresh product list
-                this.reset(); // Reset form
-            } catch (error) {
-                console.error('Error adding product:', error);
-                showMessage('Failed to add product. ' + error.message, 'error');
-            }
-        });
-
-        async function deleteProduct(productId) {
-            if (!confirm(`Are you sure you want to delete product ID ${productId}?`)) return;
-
-            const payload = new FormData();
-            payload.append('product_id', productId);
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/deleteProduct`, {
-                    method: 'POST',
-                    body: payload
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.message || `HTTP error! status: ${response.status}`);
-                
-                showMessage(result.message || `Product ID ${productId} deleted.`, 'success');
-                fetchProducts(); // Refresh product list
-            } catch (error) {
-                console.error('Error deleting product:', error);
-                showMessage('Failed to delete product. ' + error.message, 'error');
-            }
-        }
-
-        // --- Order Functions ---
-        async function fetchOrders() {
-            try {
-                const response = await fetch(`${API_BASE_URL}/getAllOrders`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const orders = await response.json();
-                
-                const tbody = document.getElementById('ordersTable').getElementsByTagName('tbody')[0];
-                tbody.innerHTML = ''; // Clear existing rows
-                orders.forEach(order => {
-                    const row = tbody.insertRow();
-                    row.insertCell().textContent = order.order_id;
-                    row.insertCell().textContent = order.customer_name;
-                    row.insertCell().textContent = parseFloat(order.total_cost).toFixed(2);
-                    row.insertCell().textContent = order.datetime;
-                });
-            } catch (error) {
-                console.error('Error fetching orders:', error);
-                showMessage('Failed to load orders. ' + error.message, 'error');
-            }
-        }
-
-        document.getElementById('addOrderForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-
-            const orderDetails = [
-                {
-                    product_id: formData.get('product_id_1') || 1, 
-                    quantity: formData.get('quantity_1') || 1,     
-                    total_price: formData.get('total_price_1') || 10 
-                }
-            ];
-            
-            const validOrderDetails = orderDetails.filter(d => d.product_id && !isNaN(parseFloat(d.quantity)) && !isNaN(parseFloat(d.total_price)) );
-
-
-            const orderData = {
-                customer_name: formData.get('customerName'),
-                grand_total: formData.get('grandTotal'),
-                datetime: new Date().toISOString().slice(0, 19).replace('T', ' '), 
-                order_details: validOrderDetails.length > 0 ? validOrderDetails : [{ product_id: 1, quantity: 0, total_price: 0 }]
-            };
-            
-            if (validOrderDetails.length === 0) {
-                 console.warn("No valid order details could be constructed from form, sending a placeholder detail. Please ensure product_id_1, quantity_1, total_price_1 hidden fields are correctly set or modify JavaScript to build details properly.");
-            }
-
-
-            const payload = new FormData();
-            payload.append('data', JSON.stringify(orderData));
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/insertOrder`, {
-                    method: 'POST',
-                    body: payload
-                });
-                const result = await response.json();
-                if (!response.ok) throw new Error(result.error || `HTTP error! status: ${response.status}`);
-                
-                showMessage(`Order added successfully! ID: ${result.order_id}`, 'success');
-                fetchOrders(); 
-                this.reset(); 
-            } catch (error) {
-                console.error('Error adding order:', error);
-                showMessage('Failed to add order. ' + error.message, 'error');
-            }
-        });
-
-
-        // --- Initial Load ---
-        window.onload = () => {
-            fetchUOMs();
-            fetchProducts();
-            fetchOrders();
-        };
-    </script>
-
+    <script src="static/script.js"></script>
 </body>
 </html>
