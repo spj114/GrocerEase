@@ -48,7 +48,13 @@ GrocerEase/
 ├── server.py 
 ├── sql_connection.py 
 ├── uom_dao.py 
-└── index.html 
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   └── js/
+│       └── script.js
+└── templates/  
+    └── index.html
 
 
 ## 🚀 Getting Started
